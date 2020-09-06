@@ -1,3 +1,5 @@
+console.log(calc.add(1, 2));
+
 const state = { output: "" };
 
 const numberKeys = [
