@@ -1,0 +1,40 @@
+html {
+  height: 100%;
+  width: 100%;
+}
+
+body {
+  padding: 0px;
+  margin: 0px;
+  height: 95%;
+  width: 95%;
+}
+
+#app {
+  height: 100%;
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+}
+
+#main {
+  display: grid;
+  grid-template-columns: auto auto auto auto;
+  width: 700px;
+  height: 700px;
+  border: rgba(0, 0, 0, 0.25) solid 1px;
+}
+
+#main div {
+  border: rgba(0, 0, 0, 1) solid 1px;
+}
+
+.pixel {
+  background-color: black;
+  /* opacity: 0; */
+}
+
+.clearButton {
+  margin-top: 10px;
+  padding: 10px;
+}

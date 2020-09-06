@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=900, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" href="style.css" />
+    <title>Rock Paper Scissors</title>
+  </head>
+  <body>
+    <div class="main">
+      <div class="content">
+        <h1>
+          Rock Paper Scissors
+        </h1>
+        <h2>Round <span id="roundNumber">1</span></h2>
+        <div class="playersContainer">
+          <div>Player: <span id="playerSelection"></span></div>
+          <div>Computer: <span id="computerSelection"></span></div>
+        </div>
+        <div class="roundResult">
+          <span id="roundResult"></span>
+        </div>
+        <div class="controlsContainer">
+          <div id="resultStringContainer">
+            <span id="gameResultString">1</span>
+            <span id="gameResultScore">2</span>
+          </div>
+          <div>
+            <button id="rock" disabled="true">
+              Rock
+            </button>
+          </div>
+          <div>
+            <button id="paper" disabled="true">
+              Paper
+            </button>
+          </div>
+          <div>
+            <button id="scissors" disabled="true">
+              Scissors
+            </button>
+          </div>
+        </div>
+        <div class="startButton">
+          <button id="startButton">
+            Start Game
+          </button>
+        </div>
+        <div class="scoreContainer">
+          <h3>Score</h3>
+          <div class="scores">
+            <div>Player: <span id="playerScore">0</span></div>
+            <div>Computer: <span id="computerScore">0</span></div>
+            <div>Tie: <span id="tieScore">0</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+  <script src="rpsLogic.js"></script>
+  <script src="app.js"></script>
+</html>
