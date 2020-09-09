@@ -1,6 +1,10 @@
-console.log(calc.add(1, 2));
-
-const state = { output: "" };
+const state = {
+  currentInput: "",
+  firstNumber: null,
+  secondNumber: null,
+  operator: null,
+  output: "",
+};
 
 const numberKeys = [
   ".",
@@ -40,25 +44,79 @@ const buildCalculator = () => {
 
 const handleClick = ({ name, value }) => {
   if (name === "function") return handleFunction(value);
-  prevOutput = state.output;
-  state.output = `${prevOutput}${value}`;
-  updateDisplay();
-  return console.log(name, value);
+  if (name === "operator") return handleOperator(value);
+  if (name === "equals") return handleOperator(value);
+  if (name === "number") return handleNumber(value);
 };
 
 const updateDisplay = () => {
+  const { firstNumber, secondNumber } = state;
+  const newOutput = [firstNumber, secondNumber].reduce((a, b) =>
+    b === null ? a : b
+  );
+  state.output = newOutput;
   document.querySelector("#display").innerHTML = state.output;
+  console.log(state);
 };
 
 const handleFunction = (value) => {
   if (value === "clear") return handleClear();
-  if (value === "back") return handleClear();
+  if (value === "back") return handleBack();
+};
+
+const handleNumber = (value) => {
+  const { firstNumber, secondNumber, operator } = state;
+  if (operator === null) {
+    const prevNumber = firstNumber === null ? "" : firstNumber;
+    const newNumber = `${prevNumber}${value}`;
+    state.firstNumber = newNumber;
+  } else {
+    const prevNumber = secondNumber === null ? "" : secondNumber;
+    const newNumber = `${prevNumber}${value}`;
+    state.secondNumber = newNumber;
+  }
+  updateDisplay();
+};
+
+const handleOperator = (value) => {
+  if (state.firstNumber === null) return;
+  if (state.secondNumber !== null) {
+    const { firstNumber, secondNumber, operator } = state;
+    const result = calc.calculate({
+      firstNumber,
+      secondNumber,
+      operator,
+    });
+    const newFirstNumber =
+      result.toString().length > 10 ? roundNumber(result) : result;
+    state.secondNumber = null;
+    state.firstNumber = newFirstNumber;
+  } else {
+    state.operator = value === "=" ? state.operator : value;
+  }
+  updateDisplay();
+};
+
+const roundNumber = (num) => {
+  const sign = Math.sign(num);
+  const absNum = Math.abs(num);
+  if (absNum > Math.pow(10, 10)) {
+    return Number.parseFloat(absNum * sign).toExponential(4);
+  }
+  const base = Math.ceil(Math.log10(absNum));
+  return absNum.toPrecision(13 - base) * sign;
 };
 
 const handleClear = () => {
   state.output = "";
+  state.currentInput = "";
+  state.firstNumber = null;
+  state.secondNumber = null;
+  state.operator = null;
   updateDisplay();
 };
+
+const handleBack = () => {};
 
 const buildDisplay = () => {
   const container = document.createElement("div");
