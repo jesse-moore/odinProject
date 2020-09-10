@@ -66,7 +66,11 @@ const handleFunction = (value) => {
 
 const handleNumber = (value) => {
   const { firstNumber, secondNumber, operator } = state;
-  if (operator === null) {
+  console.log(operator);
+  if (operator === "=") {
+    state.firstNumber = value;
+    state.operator = null;
+  } else if (operator === null) {
     const prevNumber = firstNumber === null ? "" : firstNumber;
     const newNumber = `${prevNumber}${value}`;
     state.firstNumber = newNumber;
@@ -91,6 +95,7 @@ const handleOperator = (value) => {
       result.toString().length > 10 ? roundNumber(result) : result;
     state.secondNumber = null;
     state.firstNumber = newFirstNumber;
+    state.operator = value === "=" ? value : state.operator;
   } else {
     state.operator = value === "=" ? state.operator : value;
   }
@@ -104,7 +109,7 @@ const roundNumber = (num) => {
     return Number.parseFloat(absNum * sign).toExponential(4);
   }
   const base = Math.ceil(Math.log10(absNum));
-  return absNum.toPrecision(13 - base) * sign;
+  return absNum.toPrecision(10 - base) * sign;
 };
 
 const handleClear = () => {

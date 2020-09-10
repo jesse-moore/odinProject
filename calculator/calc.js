@@ -22,7 +22,7 @@ class calc {
       case "/":
         return this.divide(firstNumber, secondNumber);
       default:
-        return 0;
+        return firstNumber;
     }
   }
 }
