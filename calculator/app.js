@@ -40,6 +40,7 @@ const buildCalculator = () => {
     operatorButtonsDiv,
     equalsButtonDiv
   );
+  updateDisplay();
 };
 
 const handleClick = ({ name, value }) => {
@@ -54,7 +55,7 @@ const updateDisplay = () => {
   const newOutput = [firstNumber, secondNumber].reduce((a, b) =>
     b === null ? a : b
   );
-  state.output = newOutput;
+  state.output = newOutput === "" || newOutput === null ? "0" : newOutput;
   document.querySelector("#display").innerHTML = state.output;
   console.log(state);
 };
@@ -66,17 +67,26 @@ const handleFunction = (value) => {
 
 const handleNumber = (value) => {
   const { firstNumber, secondNumber, operator } = state;
-  console.log(operator);
   if (operator === "=") {
     state.firstNumber = value;
     state.operator = null;
   } else if (operator === null) {
-    const prevNumber = firstNumber === null ? "" : firstNumber;
-    const newNumber = `${prevNumber}${value}`;
+    if (value === "." && firstNumber.includes(".")) return;
+    const prevNumber =
+      firstNumber === null || firstNumber === "0" ? "" : firstNumber;
+    const newNumber =
+      value === "negate"
+        ? calc.negate(prevNumber).toString()
+        : `${prevNumber}${value}`;
     state.firstNumber = newNumber;
   } else {
-    const prevNumber = secondNumber === null ? "" : secondNumber;
-    const newNumber = `${prevNumber}${value}`;
+    if (value === "." && secondNumber.includes(".")) return;
+    const prevNumber =
+      secondNumber === null || secondNumber === "0" ? "" : secondNumber;
+    const newNumber =
+      value === "negate"
+        ? calc.negate(prevNumber).toString()
+        : `${prevNumber}${value}`;
     state.secondNumber = newNumber;
   }
   updateDisplay();
