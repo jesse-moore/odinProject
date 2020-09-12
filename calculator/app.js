@@ -1,7 +1,7 @@
 const state = {
   currentInput: "",
-  firstNumber: null,
-  secondNumber: null,
+  firstNumber: "",
+  secondNumber: "",
   operator: null,
   output: "",
 };
@@ -53,9 +53,9 @@ const handleClick = ({ name, value }) => {
 const updateDisplay = () => {
   const { firstNumber, secondNumber } = state;
   const newOutput = [firstNumber, secondNumber].reduce((a, b) =>
-    b === null ? a : b
+    b === "" ? a : b
   );
-  state.output = newOutput === "" || newOutput === null ? "0" : newOutput;
+  state.output = newOutput === "" ? "0" : newOutput;
   document.querySelector("#display").innerHTML = state.output;
   console.log(state);
 };
@@ -73,7 +73,7 @@ const handleNumber = (value) => {
   } else if (operator === null) {
     if (value === "." && firstNumber.includes(".")) return;
     const prevNumber =
-      firstNumber === null || firstNumber === "0" ? "" : firstNumber;
+      firstNumber === "" || firstNumber === "0" ? "" : firstNumber;
     const newNumber =
       value === "negate"
         ? calc.negate(prevNumber).toString()
@@ -82,7 +82,7 @@ const handleNumber = (value) => {
   } else {
     if (value === "." && secondNumber.includes(".")) return;
     const prevNumber =
-      secondNumber === null || secondNumber === "0" ? "" : secondNumber;
+      secondNumber === "" || secondNumber === "0" ? "" : secondNumber;
     const newNumber =
       value === "negate"
         ? calc.negate(prevNumber).toString()
@@ -93,8 +93,8 @@ const handleNumber = (value) => {
 };
 
 const handleOperator = (value) => {
-  if (state.firstNumber === null) return;
-  if (state.secondNumber !== null) {
+  if (state.firstNumber === "") return;
+  if (state.secondNumber !== "") {
     const { firstNumber, secondNumber, operator } = state;
     const result = calc.calculate({
       firstNumber,
@@ -103,7 +103,7 @@ const handleOperator = (value) => {
     });
     const newFirstNumber =
       result.toString().length > 10 ? roundNumber(result) : result;
-    state.secondNumber = null;
+    state.secondNumber = "";
     state.firstNumber = newFirstNumber;
     state.operator = value === "=" ? value : state.operator;
   } else {
@@ -125,13 +125,26 @@ const roundNumber = (num) => {
 const handleClear = () => {
   state.output = "";
   state.currentInput = "";
-  state.firstNumber = null;
-  state.secondNumber = null;
+  state.firstNumber = "";
+  state.secondNumber = "";
   state.operator = null;
   updateDisplay();
 };
 
-const handleBack = () => {};
+const handleBack = () => {
+  if (state.operator === "=") return;
+  if (state.operator === null) {
+    if (state.firstNumber.length === 0) return;
+    const prevNumber = state.firstNumber;
+    state.firstNumber = prevNumber.slice(0, -1);
+  } else {
+    if (state.secondNumber.length === 0) return;
+    const prevNumber = state.secondNumber;
+    const newNumber = prevNumber.slice(0, -1);
+    state.secondNumber = newNumber.length === 0 ? "0" : newNumber;
+  }
+  updateDisplay();
+};
 
 const buildDisplay = () => {
   const container = document.createElement("div");
