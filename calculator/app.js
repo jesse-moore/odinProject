@@ -57,7 +57,6 @@ const updateDisplay = () => {
   );
   state.output = newOutput === "" ? "0" : newOutput;
   document.querySelector("#display").innerHTML = state.output;
-  console.log(state);
 };
 
 const handleFunction = (value) => {
@@ -72,6 +71,7 @@ const handleNumber = (value) => {
     state.operator = null;
   } else if (operator === null) {
     if (value === "." && firstNumber.includes(".")) return;
+    if (firstNumber.length === 10) return;
     const prevNumber =
       firstNumber === "" || firstNumber === "0" ? "" : firstNumber;
     const newNumber =
@@ -80,7 +80,8 @@ const handleNumber = (value) => {
         : `${prevNumber}${value}`;
     state.firstNumber = newNumber;
   } else {
-    if (value === "." && secondNumber.includes(".")) return;
+	if (value === "." && secondNumber.includes(".")) return;
+	if (secondNumber.length === 10) return;
     const prevNumber =
       secondNumber === "" || secondNumber === "0" ? "" : secondNumber;
     const newNumber =
@@ -116,7 +117,7 @@ const roundNumber = (num) => {
   const sign = Math.sign(num);
   const absNum = Math.abs(num);
   if (absNum > Math.pow(10, 10)) {
-    return Number.parseFloat(absNum * sign).toExponential(4);
+    return Number.parseFloat(absNum * sign).toExponential(6);
   }
   const base = Math.ceil(Math.log10(absNum));
   return absNum.toPrecision(10 - base) * sign;
